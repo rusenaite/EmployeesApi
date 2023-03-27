@@ -8,6 +8,7 @@ namespace EmployeeApi.Api.Entities
         InformationAnalist,
         QA,
         SoftwareDeveloper,
-        HR
+        HR,
+        NotDefinedYet
     }
 }

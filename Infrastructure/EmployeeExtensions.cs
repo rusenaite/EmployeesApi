@@ -4,16 +4,15 @@ namespace EmployeeApi.Infrastructure
 {
     public static class EmployeeExtensions
     {
-        public static EmployeeDto AsDto(this Employee employee)
+        public static EmployeeDto AsDto(this Employee employee, Role role)
         {
             return new EmployeeDto()
             {
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                //Role = employee.Role,
-                RoleId = employee.RoleId,
                 CurrentSalary = employee.CurrentSalary,
-                BirthDate = employee.BirthDate
+                BirthDate = employee.BirthDate,
+                Role = role
             };
         }
     }

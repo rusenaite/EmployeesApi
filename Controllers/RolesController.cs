@@ -19,13 +19,15 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Role> GetRoles()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetRoles()
         {
-            return _context.Roles;
+            return Ok(_context.Roles.Select(x => x.AsDto()));
         }
 
         [HttpPost]
-        public void AddRoles(CreateRoleDto createRoleDto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public IActionResult AddRoles(CreateRoleDto createRoleDto)
         {
             var role = new Role() 
             {
@@ -37,10 +39,14 @@ namespace EmployeeApi.Controllers
 
             _context.Roles.Add(role);
             _context.SaveChanges();
+
+            return CreatedAtAction(nameof(AddRoles), role.Id);
         }
 
         [HttpPut("/{positionName}")]
-        public ActionResult UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
         {
             var role = _context.Roles.SingleOrDefault(x => x.Position.ToString() == positionName);
 
@@ -55,16 +61,17 @@ namespace EmployeeApi.Controllers
 
             _context.SaveChanges();
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete]
-        public ActionResult Delete()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult Delete()
         {
             _context.Roles.ExecuteDelete();
             _context.SaveChanges();
 
-            return Ok();
+            return NoContent();
         }
     }
 }

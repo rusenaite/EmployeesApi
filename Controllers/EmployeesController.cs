@@ -1,4 +1,5 @@
-﻿using EmployeeApi.Infrastructure;
+﻿using EmployeeApi.Api.Entities;
+using EmployeeApi.Infrastructure;
 using EmployeeApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,28 +19,33 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<EmployeeDto>> GetAllEmployeesAsync()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<EmployeeDto>> GetAllEmployees()
         {
-            var employees = _context.Employees.Select(employee => employee.AsDto()).ToList();
-
+            var employees = _context.Employees
+                .Select(employee => employee.AsDto(_context.Roles.Single(x => x.Id == employee.RoleId)))
+                .ToList();
+            
             return Ok(employees);
         }
 
-        [HttpGet("/{name}")]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployeesByNameAsync(string name)
+        [HttpGet("/{position}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<EmployeeDto>> GetEmployeesByPosition(string position)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return NotFound();
-            }
+            var employees = _context.Employees
+                .Select(employee => employee.AsDto(_context.Roles.Single(x => x.Id == employee.RoleId)))
+                .ToList();
 
-            var employees = await _context.Employees.Where(x => x.FirstName == name).ToListAsync();
+            var employeesInRole = employees.Where(x => x.Role.Position.ToString() == position).ToList();
 
-            return employees.Count is not 0 ? Ok(employees.Select(x => x.AsDto())) : NotFound();
+            return employeesInRole.Count is not 0 ? Ok(employeesInRole) : NotFound();
         }
 
         [HttpPost]
-        public void AddNewEmployeeAsync(CreateEmployeeDto employeeDto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public IActionResult AddNewEmployee(CreateEmployeeDto employeeDto)
         {
             var employee = new Employee()
             {
@@ -49,16 +55,25 @@ namespace EmployeeApi.Controllers
                 BirthDate = employeeDto.BirthDate,
                 HomeAddress = employeeDto.HomeAddress,
                 CurrentSalary = employeeDto.CurrentSalary,
-                //Role = employeeDto.Role
-                RoleId = employeeDto.RoleId
+                RoleId = _context.Roles.ToList().FirstOrDefault(x => x.Position.ToString() == employeeDto.PositionName)?.Id ?? new Role()
+                {
+                    Id = Guid.NewGuid(),
+                    Position = Position.NotDefinedYet.ToString(),
+                    HoursPerWeek = 40,
+                    Description = "Role is not clear at this moment."
+                }.Id
             };
 
             _context.Employees.Add(employee);
             _context.SaveChanges();
+
+            return CreatedAtAction(nameof(AddNewEmployee), employee.Id);
         }
 
         [HttpPut("/{id}")]
-        public ActionResult UpdateEmployeeAsync(Guid id, UpdateEmployeeDto updatedEmployee)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updatedEmployee)
         {
             var employee = _context.Employees.SingleOrDefault(x => x.Id == id);
 
@@ -72,16 +87,17 @@ namespace EmployeeApi.Controllers
             employee.BirthDate = updatedEmployee.BirthDate;
             employee.CurrentSalary = updatedEmployee.CurrentSalary;
             employee.HomeAddress = updatedEmployee.HomeAddress;
-            //employee.Role = updatedEmployee.Role;
             employee.RoleId = updatedEmployee.RoleId;
 
             _context.SaveChanges();
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("/{id}")]
-        public ActionResult DeleteEmployeeAsync(Guid id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteEmployee(Guid id)
         {
             var employee = _context.Employees.SingleOrDefault(x => x.Id == id);
 
@@ -90,19 +106,20 @@ namespace EmployeeApi.Controllers
                 _context.Employees.Remove(employee);
                 _context.SaveChanges();
 
-                return Ok();
+                return NoContent();
             }
             
             return NotFound();
         }
 
         [HttpDelete]
-        public ActionResult DeleteAllEmployeesAsync()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult DeleteAllEmployees()
         {
             _context.Employees.ExecuteDelete();
             _context.SaveChanges();
 
-            return Ok();
+            return NoContent();
         }
     }
 }
