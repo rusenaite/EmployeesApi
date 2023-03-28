@@ -4,7 +4,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "securePassw0rd"
+      SA_PASSWORD: "#123SuperSecure"
       MSSQL_PID: "Express"
     ports:
       - "1433:1433"
@@ -14,7 +14,7 @@ services:
       timeout: 3s
       retries: 10
       start_period: 10s
-  library:
+  employees:
     build: .
     ports:
       - "5000:80"
