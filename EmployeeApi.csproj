@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>fb2fd52f-e35b-4b2d-bf55-eed339cf2128</UserSecretsId>
+    <!--<UserSecretsId>fb2fd52f-e35b-4b2d-bf55-eed339cf2128</UserSecretsId>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-    <DockerfileContext>.</DockerfileContext>
+    <DockerfileContext>.</DockerfileContext>-->
   </PropertyGroup>
 
   <ItemGroup>

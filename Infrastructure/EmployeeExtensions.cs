@@ -8,6 +8,7 @@ namespace EmployeeApi.Infrastructure
         {
             return new EmployeeDto()
             {
+                Id = employee.Id,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
                 CurrentSalary = employee.CurrentSalary,

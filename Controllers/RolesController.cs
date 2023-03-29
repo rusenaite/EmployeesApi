@@ -5,24 +5,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/roles")]
     [ApiController]
     public class RolesController : ControllerBase
     {
 
-        private readonly EmployeesDbContext _context;
+        //private readonly EmployeesDbContext _context;
+        private List<Role> _roles;
 
-        public RolesController(EmployeesDbContext context)
+        public RolesController()
         {
-            _context = context;
-            DataSeeder.SeedData(_context);
+            //_context = context;
+            //DataSeeder.SeedData(_context);
+
+            _roles = DataSeeder.SeedRoles();
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetRoles()
         {
-            return Ok(_context.Roles.Select(x => x.AsDto()));
+            //return Ok(_context.Roles.Select(x => x.AsDto()));
+            return Ok(_roles.Select(x => x.AsDto()));
         }
 
         [HttpPost]
@@ -37,18 +41,21 @@ namespace EmployeeApi.Controllers
                 HoursPerWeek = createRoleDto.HoursPerWeek
             };
 
-            _context.Roles.Add(role);
-            _context.SaveChanges();
+            //_context.Roles.Add(role);
+            //_context.SaveChanges();
+
+            _roles.Add(role);
 
             return CreatedAtAction(nameof(AddRoles), role.Id);
         }
 
-        [HttpPut("/{positionName}")]
+        [HttpPut("roles/{positionName}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
         {
-            var role = _context.Roles.SingleOrDefault(x => x.Position.ToString() == positionName);
+            //var role = _context.Roles.SingleOrDefault(x => x.Position.ToString() == positionName);
+            var role = _roles.SingleOrDefault(x => x.Position.ToString() == positionName);
 
             if (role is null)
             {
@@ -59,7 +66,7 @@ namespace EmployeeApi.Controllers
             role.Description = updatedRoleDto.Description;
             role.HoursPerWeek = updatedRoleDto.HoursPerWeek;
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
 
             return NoContent();
         }
@@ -68,8 +75,10 @@ namespace EmployeeApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public IActionResult Delete()
         {
-            _context.Roles.ExecuteDelete();
-            _context.SaveChanges();
+            //_context.Roles.ExecuteDelete();
+            //_context.SaveChanges();
+
+            _roles.RemoveAll(x => true);
 
             return NoContent();
         }
