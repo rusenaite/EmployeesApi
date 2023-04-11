@@ -1,16 +1,15 @@
-namespace EmployeeApi.Infrastructure
+﻿namespace EmployeeApi.Infrastructure.Models.EmployeeModels
 {
-    public class Employee
+    public class CreateEmployeeDto
     {
-        public Guid Id { get; init; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
         public string HomeAddress { get; set; }
         public double CurrentSalary { get; set; }
-        public Guid RoleId { get; set; }
+        public string PositionName { get; set; }
 
-        public Employee()
+        public CreateEmployeeDto()
         {
 
         }

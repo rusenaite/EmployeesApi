@@ -1,34 +1,8 @@
-using EmployeeApi.Infrastructure;
-using EmployeeApi.Models;
+using EmployeeApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
-//var builder = WebApplication.CreateBuilder(args);
-
-//// Mssql repository
-////var connection = builder.Configuration.GetConnectionString("Db");
-////builder.Services.AddDbContext<EmployeesDbContext>(options => options.UseSqlServer(connection));
-
-//builder.Services.AddControllers();
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-
-//var app = builder.Build();
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();
+//var connection = builder.Configuration.GetConnectionString("Db");
+//builder.Services.AddDbContext<EmployeesDbContext>(options => options.UseSqlServer(connection));
 
 namespace EmployeeApi.Infrastructure
 {
@@ -38,15 +12,16 @@ namespace EmployeeApi.Infrastructure
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //var server = builder.Configuration["Server"] ?? "db";
-            //var port = builder.Configuration["Port"] ?? "1433";
-            //var database = builder.Configuration["Database"] ?? "EmployeesDb";
-            //var user = builder.Configuration["User"] ?? "admin";
-            //var password = builder.Configuration["Password"] ?? "#123SuperSecure";
+            var server = builder.Configuration["Server"] ?? "db";
+            var port = builder.Configuration["Port"] ?? "1433";
+            var database = builder.Configuration["Database"] ?? "EmployeesDb";
+            var user = builder.Configuration["User"] ?? "SAA";
+            var password = builder.Configuration["Password"] ?? "#123SuperSecure";
+            var connection = $"Server={server},{port};Initial Catalog={database}; User ID ={user};Password={password};TrustServerCertificate=True;Integrated Security=false";
             //var connection = $"Server={server};Initial Catalog={database}; User ID ={user};Password={password};TrustServerCertificate=True;Integrated Security=false";
 
-            //builder.Services.AddDbContext<EmployeesDbContext>(options =>
-            //    options.UseSqlServer(connection));
+            builder.Services.AddDbContext<EmployeesDbContext>(options =>
+                options.UseSqlServer(connection));
 
             ConfigureServices(builder.Services);
 
@@ -61,6 +36,8 @@ namespace EmployeeApi.Infrastructure
 
             app.MapControllers();
 
+            DatabaseSetup.StartDatabase(app);
+
             app.Run();
         }
 
@@ -69,6 +46,9 @@ namespace EmployeeApi.Infrastructure
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddScoped<RoleService>();
+            services.AddScoped<EmployeeService>();
         }
     }
 }

@@ -1,6 +1,6 @@
-namespace EmployeeApi.Api.Entities
+namespace EmployeeApi.Infrastructure.Models
 {
-    public enum Position
+    public enum Positions
     {
         Ceo,
         Boss,

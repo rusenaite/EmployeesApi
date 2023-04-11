@@ -1,4 +1,4 @@
-﻿namespace EmployeeApi.Controllers
+﻿namespace EmployeeApi.Infrastructure.Models.EmployeeModels
 {
     public class UpdateEmployeeSalaryDto
     {

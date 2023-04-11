@@ -1,6 +1,6 @@
-﻿namespace EmployeeApi.Models
+﻿namespace EmployeeApi.Infrastructure.Models.RoleModels
 {
-    public class CreateRoleDto
+    public class UpdateRoleDto
     {
         public string Position { get; set; }
         public string Description { get; set; }

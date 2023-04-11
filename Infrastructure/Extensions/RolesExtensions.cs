@@ -1,6 +1,6 @@
-﻿using EmployeeApi.Models;
+﻿using EmployeeApi.Infrastructure.Models.RoleModels;
 
-namespace EmployeeApi.Infrastructure
+namespace EmployeeApi.Infrastructure.Extensions
 {
     public static class RolesExtensions
     {

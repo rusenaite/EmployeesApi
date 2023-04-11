@@ -1,4 +1,5 @@
-using EmployeeApi.Models;
+using EmployeeApi.Infrastructure.Models.EmployeeModels;
+using EmployeeApi.Infrastructure.Models.RoleModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure;
@@ -11,7 +12,7 @@ public class EmployeesDbContext : DbContext
     public EmployeesDbContext(DbContextOptions<EmployeesDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {        
+    {
         modelBuilder.Entity<Role>().Property(prop => prop.Id).IsRequired();
         modelBuilder.Entity<Employee>().Property(prop => prop.Id).IsRequired();
     }

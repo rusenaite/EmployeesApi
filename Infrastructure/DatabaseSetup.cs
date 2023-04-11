@@ -1,52 +1,62 @@
-﻿using EmployeeApi.Api.Entities;
-using EmployeeApi.Models;
+﻿using EmployeeApi.Infrastructure.Models;
+using EmployeeApi.Infrastructure.Models.EmployeeModels;
+using EmployeeApi.Infrastructure.Models.RoleModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure
 {
-    public class DataSeeder
+    public class DatabaseSetup
     {
-        public static void SeedData(EmployeesDbContext context)
+        public static void StartDatabase(IApplicationBuilder app)
         {
-            //if (!context.Roles.Any() || !context.Employees.Any())
-            //{
-                //var roles = SeedRoles();
-                //context.Roles.AddRange(SeedRoles());
-                //context.SaveChanges();
-
-                //context.Employees.AddRange(SeedEmployees(roles));
-                //context.SaveChanges();
-            //}
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            SeedDatabase(serviceScope.ServiceProvider.GetService<EmployeesDbContext>());
         }
 
-        public static List<Role> SeedRoles()
+        public static void SeedDatabase(EmployeesDbContext context)
+        {
+            context.Database.Migrate();
+
+            if (!context.Roles.Any())
+            {
+                Console.WriteLine("No data found, seeding test data");
+
+                context.Roles.AddRange(CreateRoles());
+                context.Employees.AddRange(CreateEmployees(context.Roles.ToList()));
+
+                context.SaveChanges();
+            }
+        }
+
+        public static List<Role> CreateRoles()
         {
             return new List<Role>()
             {
                 new Role
                 {
                     Id = Guid.NewGuid(),
-                    Position = Position.QA.ToString(),
+                    Position = Positions.QA.ToString(),
                     Description = "Role for automated tester.",
                     HoursPerWeek = 40
                 },
                 new Role
                 {
                     Id = Guid.NewGuid(),
-                    Position = Position.SoftwareDeveloper.ToString(),
+                    Position = Positions.SoftwareDeveloper.ToString(),
                     Description = "Role for .NET developer.",
                     HoursPerWeek = 40
                 },
                 new Role
                 {
                     Id = Guid.NewGuid(),
-                    Position = Position.ProductManager.ToString(),
+                    Position = Positions.ProductManager.ToString(),
                     Description = "Role for product manager of team of 10 people.",
                     HoursPerWeek = 30
                 }
             };
-        } 
+        }
 
-        public static List<Employee> SeedEmployees(List<Role> roles)
+        public static List<Employee> CreateEmployees(List<Role> roles)
         {
             return new List<Employee>()
             {

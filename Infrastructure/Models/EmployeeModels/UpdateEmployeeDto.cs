@@ -1,6 +1,4 @@
-﻿using EmployeeApi.Api.Entities;
-
-namespace EmployeeApi.Models
+﻿namespace EmployeeApi.Infrastructure.Models.EmployeeModels
 {
     public class UpdateEmployeeDto
     {

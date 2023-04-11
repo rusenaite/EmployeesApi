@@ -1,4 +1,4 @@
-﻿namespace EmployeeApi.Models
+﻿namespace EmployeeApi.Infrastructure.Models.EmployeeModels
 {
     public class EmployeeDto
     {
@@ -8,7 +8,7 @@
         public DateTime BirthDate { get; set; }
         public string HomeAddress { get; set; }
         public double CurrentSalary { get; set; }
-        public Role Role { get; set; }
+        public Models.RoleModels.Role Role { get; set; }
         public EmployeeDto()
         {
 
