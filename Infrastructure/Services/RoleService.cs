@@ -50,7 +50,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public UpdateRoleResponse UpdateRole(UpdateRoleDto updatedRoleDto)
         {
-            var role = _context.Roles.SingleOrDefault(x => x.Position == updatedRoleDto.Position);
+            var role = _context.Roles.FirstOrDefault(x => x.Position == updatedRoleDto.Position);
 
             if (role is null)
             {
