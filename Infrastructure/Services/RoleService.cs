@@ -48,13 +48,13 @@ namespace EmployeeApi.Infrastructure.Repositories
             return new AddRoleResponse(roleToAdd);
         }
 
-        public UpdateRoleResponse UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
+        public UpdateRoleResponse UpdateRole(UpdateRoleDto updatedRoleDto)
         {
-            var role = _context.Roles.SingleOrDefault(x => x.Position == positionName);
+            var role = _context.Roles.SingleOrDefault(x => x.Position == updatedRoleDto.Position);
 
             if (role is null)
             {
-                return new UpdateRoleResponse($"Role of position {positionName} does not exist.", false);
+                return new UpdateRoleResponse($"Role of position {updatedRoleDto.Position} does not exist.", false);
             }
 
             role.Position = updatedRoleDto.Position;

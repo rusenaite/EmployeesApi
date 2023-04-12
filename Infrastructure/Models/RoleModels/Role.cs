@@ -9,10 +9,10 @@
 
         public Role() { }
 
-        public Role(Guid id)
+        public Role(Guid id, string position)
         {
             Id = id;
-            Position = Positions.NotDefinedYet.ToString();
+            Position = PositionsHelper.MapStringToPosition(position).ToString();
             Description = "Role not defined yet.";
             HoursPerWeek = 40;
         }

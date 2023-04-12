@@ -22,7 +22,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public GetEmployeesResponse GetEmployeesByRole(string role)
         {
-            var foundRole = _context.Roles.First(x => x.Position.Equals(role));
+            var foundRole = _context.Roles.FirstOrDefault(x => x.Position.Equals(role));
 
             if (foundRole == null)
             {
@@ -30,7 +30,7 @@ namespace EmployeeApi.Infrastructure.Repositories
             }
 
             var employees = _context.Employees
-                .Where(employee => foundRole.Id == employee.RoleId && foundRole.Position.ToString() == role)
+                .Where(employee => foundRole.Id == employee.RoleId)
                 .ToList();
 
             if (!employees.Any())
@@ -60,6 +60,14 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public AddEmployeeResponse AddEmployee(CreateEmployeeDto employeeDto)
         {
+            var role = _context.Roles.ToList().FirstOrDefault(x => x.Position == employeeDto.PositionName);
+            
+            if(role == null)
+            {
+                role = new Role(Guid.NewGuid(), employeeDto.PositionName);
+                _context.Roles.Add(role);
+            }
+
             var employee = new Employee()
             {
                 Id = Guid.NewGuid(),
@@ -68,7 +76,7 @@ namespace EmployeeApi.Infrastructure.Repositories
                 BirthDate = employeeDto.BirthDate,
                 HomeAddress = employeeDto.HomeAddress,
                 CurrentSalary = employeeDto.CurrentSalary,
-                RoleId = _context.Roles.ToList().FirstOrDefault(x => x.Position.ToString() == employeeDto.PositionName)?.Id ?? new Role(Guid.NewGuid()).Id
+                RoleId = role.Id
             };
 
             var addedEmployee = _context.Employees.Add(employee);

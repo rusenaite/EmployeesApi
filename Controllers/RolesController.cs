@@ -46,13 +46,13 @@ namespace EmployeeApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
+        public IActionResult UpdateRole(UpdateRoleDto updatedRoleDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = _roleService.UpdateRole(positionName, updatedRoleDto);
+            var response = _roleService.UpdateRole(updatedRoleDto);
 
             if (!response.Success)
             {
