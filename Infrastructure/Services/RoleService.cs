@@ -68,12 +68,12 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public DeleteRoleResponse DeleteRole(string position)
         {
-            if(position == Positions.NotDefinedYet.ToString())
+            if (position == Positions.NotDefinedYet.ToString())
             {
                 return new DeleteRoleResponse("'NotDefinedYet' position cannot be deleted.", false);
             }
 
-            var roleToDelete = _context.Roles.First(x => x.Position == position);
+            var roleToDelete = _context.Roles.FirstOrDefault(x => x.Position == position);
 
             if (roleToDelete is null)
             {

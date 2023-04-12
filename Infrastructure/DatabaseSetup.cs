@@ -54,7 +54,7 @@ namespace EmployeeApi.Infrastructure
                     Description = "Role for product manager of team of 10 people.",
                     HoursPerWeek = 30
                 },
-                                new Role
+                new Role
                 {
                     Id = Guid.NewGuid(),
                     Position = Positions.NotDefinedYet.ToString(),

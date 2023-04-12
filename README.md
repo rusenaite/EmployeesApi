@@ -36,3 +36,23 @@
   "currentSalary": 990
 }
 ```
+
+### POST request body example (add new role)
+
+```
+{
+  "position": "InformationAnalist",
+  "description": "Writes user stories for developers.",
+  "hoursPerWeek": 30
+}
+```
+
+### PUT request body example (update role)
+
+```
+{
+  "position": "QA",
+  "description": "Tests software.",
+  "hoursPerWeek": 30
+}
+```

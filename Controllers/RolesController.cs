@@ -67,8 +67,9 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpDelete]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeleteRole(string positionName)
         {
             var response = _roleService.DeleteRole(positionName);
@@ -82,7 +83,7 @@ namespace EmployeeApi.Controllers
                 return BadRequest(response.Message);
             }
 
-            return Ok();
+            return NoContent();
         }
     }
 }
