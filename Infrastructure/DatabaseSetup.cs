@@ -22,8 +22,9 @@ namespace EmployeeApi.Infrastructure
                 Console.WriteLine("No data found, seeding test data");
 
                 context.Roles.AddRange(CreateRoles());
-                context.Employees.AddRange(CreateEmployees(context.Roles.ToList()));
+                context.SaveChanges();
 
+                context.Employees.AddRange(CreateEmployees(context.Roles.ToList()));
                 context.SaveChanges();
             }
         }
@@ -52,6 +53,13 @@ namespace EmployeeApi.Infrastructure
                     Position = Positions.ProductManager.ToString(),
                     Description = "Role for product manager of team of 10 people.",
                     HoursPerWeek = 30
+                },
+                                new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Position = Positions.NotDefinedYet.ToString(),
+                    Description = "Role for those, who does not have a position, or their position have been removed.",
+                    HoursPerWeek = 30
                 }
             };
         }
@@ -67,7 +75,7 @@ namespace EmployeeApi.Infrastructure
                     BirthDate = new DateTime(1992, 10, 9).Date,
                     HomeAddress = "88 Journal Square, Jersey City",
                     CurrentSalary = 1026.30,
-                    RoleId = roles[0].Id
+                    RoleId = roles.First(x => x.Position == "QA").Id
                 },
                 new Employee {
                     Id = Guid.Parse("F89B1B94-58DD-492A-BDB7-F9CEFF13810F"),
@@ -76,7 +84,7 @@ namespace EmployeeApi.Infrastructure
                     BirthDate = new DateTime(1990, 4, 16).Date,
                     HomeAddress = "65 Garnel St., Liverpool",
                     CurrentSalary = 1005.60,
-                    RoleId = roles[1].Id
+                    RoleId = roles.First(x => x.Position == "SoftwareDeveloper").Id
                 },
                 new Employee {
                     Id = Guid.Parse("0B9DFE0A-8628-426A-A802-DC162331F1F6"),
@@ -85,7 +93,7 @@ namespace EmployeeApi.Infrastructure
                     BirthDate = new DateTime(1989, 9, 1).Date,
                     HomeAddress = "96 Lightbull St., London",
                     CurrentSalary = 1015.99,
-                    RoleId = roles[2].Id
+                    RoleId = roles.First(x => x.Position == "ProductManager").Id
                 }
             };
         }

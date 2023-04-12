@@ -41,7 +41,7 @@ namespace EmployeeApi.Controllers
             return CreatedAtAction(nameof(AddRole), response.Role?.Id);
         }
 
-        [HttpPut("roles/{positionName}")]
+        [HttpPut("{positionName}")]
         //[ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

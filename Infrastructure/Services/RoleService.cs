@@ -1,4 +1,5 @@
 ﻿using EmployeeApi.Infrastructure.Extensions;
+using EmployeeApi.Infrastructure.Models;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.Role;
 using EmployeeApi.Infrastructure.Responses.RoleResponses;
@@ -49,7 +50,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public UpdateRoleResponse UpdateRole(string positionName, UpdateRoleDto updatedRoleDto)
         {
-            var role = _context.Roles.SingleOrDefault(x => x.Position.ToString() == positionName);
+            var role = _context.Roles.SingleOrDefault(x => x.Position == positionName);
 
             if (role is null)
             {
@@ -67,17 +68,26 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public DeleteRoleResponse DeleteRole(string position)
         {
-            var role = _context.Roles.SingleOrDefault(x => x.Position.ToString() == position);
+            if(position == Positions.NotDefinedYet.ToString())
+            {
+                return new DeleteRoleResponse("'NotDefinedYet' position cannot be deleted.", false);
+            }
 
-            if (role is null)
+            var roleToDelete = _context.Roles.First(x => x.Position == position);
+
+            if (roleToDelete is null)
             {
                 return new DeleteRoleResponse($"Role of position {position} does not exist.", false);
             }
 
-            _context.Roles.Remove(role);
+            _context.Roles.Remove(roleToDelete);
+
+            var effectedEmployees = _context.Employees.Where(x => x.RoleId == roleToDelete.Id).ToList();
+            effectedEmployees.ForEach(x => x.RoleId = _context.Roles.Single(role => role.Position == Positions.NotDefinedYet.ToString()).Id);
+
             _context.SaveChanges();
 
-            return new DeleteRoleResponse(role);
+            return new DeleteRoleResponse(roleToDelete);
         }
     }
 }

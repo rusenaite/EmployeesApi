@@ -2,6 +2,7 @@
 using EmployeeApi.Infrastructure.Models.EmployeeModels;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.EmployeeResponses;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure.Repositories
 {
@@ -21,9 +22,9 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public GetEmployeesResponse GetEmployeesByRole(string role)
         {
-            var foundRole = _context.Roles.Single(x => x.Position.ToString() == role);
+            var foundRole = _context.Roles.First(x => x.Position.Equals(role));
 
-            if(foundRole == null)
+            if (foundRole == null)
             {
                 return new GetEmployeesResponse($"Role {role} doesn't exist.");
             }
