@@ -25,7 +25,7 @@ namespace EmployeeApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public IActionResult AddRole(CreateRoleDto createRoleDto)
+        public IActionResult AddRole([FromBody] CreateRoleDto createRoleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -42,11 +42,10 @@ namespace EmployeeApi.Controllers
         }
 
         [HttpPut("{positionName}")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateRole(UpdateRoleDto updatedRoleDto)
+        public IActionResult UpdateRole([FromBody] UpdateRoleDto updatedRoleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +65,7 @@ namespace EmployeeApi.Controllers
             return Ok(response.Role);
         }
 
-        [HttpDelete]
+        [HttpDelete("{positionName}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -7,7 +7,7 @@
 5. In this folder, open preferred terminal (bash, cmd, PowerShell, etc.)
 4. Run `docker-compose up`
 5. Wait until `employeeapi` container appears and starts up
-6. In your browser, navigate to `http://localhost:5000/swagger/index.html`
+6. For UI, in your browser, navigate to `http://localhost:5000/swagger/index.html`. Endpoints are listed below.
 7. With Swagger UI, you should see Employee API
 
 ## Demo
@@ -55,4 +55,14 @@
   "description": "Tests software.",
   "hoursPerWeek": 30
 }
+```
+
+### Endpoints
+
+```
+GET http://localhost:5000/api/employees
+POST http://localhost:5000/api/employees + request body
+GET (by position) http://localhost:5000/{position}
+PUT http://localhost:5000/{employeeId} + request body
+DELETE http://localhost:5000/{id}
 ```
