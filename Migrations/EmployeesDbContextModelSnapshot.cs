@@ -22,7 +22,7 @@ namespace EmployeeApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EmployeeApi.Infrastructure.Employee", b =>
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.EmployeeModels.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,10 +51,12 @@ namespace EmployeeApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EmployeeApi.Models.Role", b =>
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.RoleModels.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,6 +76,17 @@ namespace EmployeeApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.EmployeeModels.Employee", b =>
+                {
+                    b.HasOne("EmployeeApi.Infrastructure.Models.RoleModels.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@ using EmployeeApi.Infrastructure.Models;
 using EmployeeApi.Infrastructure.Models.EmployeeModels;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.EmployeeResponses;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure.Repositories
 {
@@ -19,7 +20,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
         public IEnumerable<Employee> GetAllEmployees()
         {
-            return _context.Employees;
+            return _context.Employees.Include("Role");
         }
 
         public GetEmployeesResponse GetEmployeesByRole(string role)
@@ -32,7 +33,8 @@ namespace EmployeeApi.Infrastructure.Repositories
             }
 
             var employees = _context.Employees
-                .Where(employee => foundRole.Id == employee.RoleId)
+                .Include("Role")
+                .Where(employee => foundRole == employee.Role)
                 .ToList();
 
             if (!employees.Any())
@@ -78,7 +80,7 @@ namespace EmployeeApi.Infrastructure.Repositories
                 BirthDate = employeeDto.BirthDate,
                 HomeAddress = employeeDto.HomeAddress,
                 CurrentSalary = employeeDto.CurrentSalary,
-                RoleId = role.Id
+                Role = role
             };
 
             var addedEmployee = _context.Employees.Add(employee);
@@ -101,7 +103,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
             var currentRole = _roleService.GetRoleById(id);
 
-            if (!currentRole.Success || currentRole.Role.Position == updateEmployeeDto.PositionName)
+            if (!currentRole.Success || employee.Role.Position == updateEmployeeDto.PositionName)
             {
                 _context.SaveChanges();
                 return new UpdateEmployeeResponse(employee);
@@ -116,7 +118,7 @@ namespace EmployeeApi.Infrastructure.Repositories
                 return new UpdateEmployeeResponse(employee);
             }
 
-            employee.RoleId = roleFromDatabase.Role.Id;
+            employee.Role = new Role(roleFromDatabase.Role);
 
             _context.SaveChanges();
             return new UpdateEmployeeResponse(employee);

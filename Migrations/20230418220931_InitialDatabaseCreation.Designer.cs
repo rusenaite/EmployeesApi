@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeApi.Migrations
 {
     [DbContext(typeof(EmployeesDbContext))]
-    [Migration("20230322071345_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230418220931_InitialDatabaseCreation")]
+    partial class InitialDatabaseCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace EmployeeApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EmployeeApi.Infrastructure.Employee", b =>
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.EmployeeModels.Employee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace EmployeeApi.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("EmployeeApi.Models.Role", b =>
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.RoleModels.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,9 +81,9 @@ namespace EmployeeApi.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("EmployeeApi.Infrastructure.Employee", b =>
+            modelBuilder.Entity("EmployeeApi.Infrastructure.Models.EmployeeModels.Employee", b =>
                 {
-                    b.HasOne("EmployeeApi.Models.Role", "Role")
+                    b.HasOne("EmployeeApi.Infrastructure.Models.RoleModels.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -1,5 +1,6 @@
 ﻿using EmployeeApi.Infrastructure.Extensions;
 using EmployeeApi.Infrastructure.Models;
+using EmployeeApi.Infrastructure.Models.EmployeeModels;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.RoleResponses;
 
@@ -8,6 +9,7 @@ namespace EmployeeApi.Infrastructure.Repositories
     public class RoleService
     {
         private readonly EmployeesDbContext _context;
+        private readonly EmployeeService _employeeService;
 
         public RoleService(EmployeesDbContext context)
         {
@@ -96,8 +98,14 @@ namespace EmployeeApi.Infrastructure.Repositories
 
             _context.Roles.Remove(roleToDelete);
 
-            var effectedEmployees = _context.Employees.Where(x => x.RoleId == roleToDelete.Id).ToList();
-            effectedEmployees.ForEach(x => x.RoleId = _context.Roles.Single(role => role.Position == Positions.NotDefinedYet.ToString()).Id);
+            var effectedEmployees = _employeeService.GetAllEmployees().Where(x => x.Role.Id == roleToDelete.Id);
+            var undefinedRole = _context.Roles.Single(role => role.Position == Positions.NotDefinedYet.ToString());
+
+            foreach (var employee in effectedEmployees)
+            {
+                _employeeService.UpdateEmployee(employee.Id, new UpdateEmployeeDto() { CurrentSalary = 1000, HomeAddress = employee.HomeAddress, PositionName = undefinedRole.Position });
+            }
+
 
             _context.SaveChanges();
 

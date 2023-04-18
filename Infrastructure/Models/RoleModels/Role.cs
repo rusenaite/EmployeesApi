@@ -16,5 +16,13 @@
             Description = "Role not defined yet.";
             HoursPerWeek = 40;
         }
+
+        public Role(RoleDto roleDto)
+        {
+            Id = roleDto.Id;
+            Position = roleDto.Position;
+            Description = roleDto.Description;
+            HoursPerWeek = roleDto.HoursPerWeek;
+        }
     }
 }
