@@ -39,7 +39,7 @@ http://localhost:5000/api/employees/?position=QA
 ```
 http://localhost:5000/api/employees
 ```
-+
+
 ```
 {
   "firstName": "New",
@@ -91,6 +91,10 @@ http://localhost:5000/api/roles
 <br>
 
 ```
+http://localhost:5000/api/roles
+```
+
+```
 {
   "position": "InformationAnalist",
   "description": "Writes user stories for developers.",
@@ -102,6 +106,10 @@ http://localhost:5000/api/roles
 <details>
 <summary>PUT URI & request body example in JSON (update role)</summary>
 <br>
+
+```
+http://localhost:5000/api/roles
+```
 
 ```
 {
