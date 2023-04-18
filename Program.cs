@@ -1,9 +1,6 @@
 using EmployeeApi.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-//var connection = builder.Configuration.GetConnectionString("Db");
-//builder.Services.AddDbContext<EmployeesDbContext>(options => options.UseSqlServer(connection));
-
 namespace EmployeeApi.Infrastructure
 {
     public class Program
@@ -12,16 +9,8 @@ namespace EmployeeApi.Infrastructure
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var server = builder.Configuration["Server"] ?? "LAPTOP-ABMOM9FJ";
-            var port = builder.Configuration["Port"] ?? "1433";
-            var database = builder.Configuration["Database"] ?? "master";
-            var user = builder.Configuration["User"] ?? "SAA";
-            var password = builder.Configuration["Password"] ?? "#123SuperSecure";
-            var connection = $"Server={server},{port};Initial Catalog={database}; User ID ={user};Password={password};TrustServerCertificate=True;Integrated Security=false";
-            //var connection = $"Server={server};Initial Catalog={database}; User ID ={user};Password={password};TrustServerCertificate=True;Integrated Security=false";
-
-            builder.Services.AddDbContext<EmployeesDbContext>(options =>
-                options.UseSqlServer(connection));
+            var connection = builder.Configuration.GetConnectionString("Db");
+            builder.Services.AddDbContext<EmployeesDbContext>(options => options.UseSqlServer(connection));
 
             ConfigureServices(builder.Services);
 

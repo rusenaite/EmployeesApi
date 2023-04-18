@@ -1,18 +1,20 @@
 ﻿using EmployeeApi.Infrastructure.Extensions;
+using EmployeeApi.Infrastructure.Models;
 using EmployeeApi.Infrastructure.Models.EmployeeModels;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.EmployeeResponses;
-using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure.Repositories
 {
     public class EmployeeService
     {
         private readonly EmployeesDbContext _context;
+        private readonly RoleService _roleService;
 
-        public EmployeeService(EmployeesDbContext context)
+        public EmployeeService(EmployeesDbContext context, RoleService roleService)
         {
             _context = context;
+            _roleService = roleService; 
         }
 
         public IEnumerable<Employee> GetAllEmployees()
@@ -89,7 +91,7 @@ namespace EmployeeApi.Infrastructure.Repositories
         {
             var employee = GetEmployeeFromId(id);
 
-            if (employee is null)
+            if (employee == null)
             {
                 return new UpdateEmployeeResponse($"Employee with id {id} does not exist.", false);
             }
@@ -97,8 +99,26 @@ namespace EmployeeApi.Infrastructure.Repositories
             employee.CurrentSalary = updateEmployeeDto.CurrentSalary;
             employee.HomeAddress = updateEmployeeDto.HomeAddress;
 
-            _context.SaveChanges();
+            var currentRole = _roleService.GetRoleById(id);
 
+            if (!currentRole.Success || currentRole.Role.Position == updateEmployeeDto.PositionName)
+            {
+                _context.SaveChanges();
+                return new UpdateEmployeeResponse(employee);
+            }
+
+            var position = updateEmployeeDto.PositionName.MapStringToPosition().ToString();
+            var roleFromDatabase = _roleService.GetRoleByPosition(position);
+
+            if (!roleFromDatabase.Success)
+            {
+                _context.SaveChanges();
+                return new UpdateEmployeeResponse(employee);
+            }
+
+            employee.RoleId = roleFromDatabase.Role.Id;
+
+            _context.SaveChanges();
             return new UpdateEmployeeResponse(employee);
         }
 
@@ -111,10 +131,10 @@ namespace EmployeeApi.Infrastructure.Repositories
                 _context.Employees.Remove(employeeToDelete);
                 _context.SaveChanges();
 
-                return new DeleteEmployeeResponse(employeeToDelete);
+                return new DeleteEmployeeResponse(true, $"Employee with ID {id} was deleted.", true, employeeToDelete);
             }
 
-            return new DeleteEmployeeResponse($"Employee with id {id} was deleted.", false);
+            return new DeleteEmployeeResponse($"Employee with id {id} was not found.", false);
         }
     }
 }

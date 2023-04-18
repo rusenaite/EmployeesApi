@@ -8,6 +8,7 @@ namespace EmployeeApi.Infrastructure.Extensions
         {
             return new RoleDto()
             {
+                Id = role.Id,
                 Position = role.Position,
                 Description = role.Description,
                 HoursPerWeek = role.HoursPerWeek

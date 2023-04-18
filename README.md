@@ -12,8 +12,34 @@
 
 ## Demo
 
-### POST request body example (add new employee)
+#### Employees
 
+<details>
+<summary>GET URI (get all employees)</summary>
+<br>
+
+```
+http://localhost:5000/api/employees
+```
+</details>
+
+<details>
+<summary>GET URI (get employees by position)</summary>
+<br>
+
+```
+http://localhost:5000/api/employees/?position=QA
+```
+</details>
+
+<details>
+<summary>POST URI & request body example in JSON (add new employee)</summary>
+<br>
+
+```
+http://localhost:5000/api/employees
+```
++
 ```
 {
   "firstName": "New",
@@ -24,20 +50,45 @@
   "positionName": "QA"
 }
 ```
+</details>
 
-### PUT request body example (update existing employee)
+<details>
+<summary>PUT URI & request body example in JSON (update existing employee)</summary>
+<br>
 
 ```
 {
-  "firstName": "NewName",
-  "lastName": "NewLastName",
-  "birthDate": "1998-03-29T08:17:15.237Z",
   "homeAddress": "Some address 123",
-  "currentSalary": 990
+  "currentSalary": 990,
+  "positionName": ProductOwner
 }
 ```
+</details>
 
-### POST request body example (add new role)
+<details>
+<summary>DELETE URI (delete employee by ID)</summary>
+<br>
+
+```
+http://localhost:5000/api/employees/f89b1b94-58dd-492a-bdb7-f9ceff13810f
+```
+</details>
+
+
+#### Roles
+
+<details>
+<summary>GET URI (get all roles)</summary>
+<br>
+
+```
+http://localhost:5000/api/roles
+```
+</details>
+
+<details>
+<summary>POST URI & request body example in JSON (add new role)</summary>
+<br>
 
 ```
 {
@@ -46,23 +97,26 @@
   "hoursPerWeek": 30
 }
 ```
+</details>
 
-### PUT request body example (update role)
+<details>
+<summary>PUT URI & request body example in JSON (update role)</summary>
+<br>
 
 ```
 {
   "position": "QA",
-  "description": "Tests software.",
+  "description": "Writes Web API tests and UI tests.",
   "hoursPerWeek": 30
 }
 ```
+</details>
 
-### Endpoints
+<details>
+<summary>DELETE URI (delete role by position)</summary>
+<br>
 
 ```
-GET http://localhost:5000/api/employees
-POST http://localhost:5000/api/employees + request body
-GET (by position) http://localhost:5000/{position}
-PUT http://localhost:5000/{employeeId} + request body
-DELETE http://localhost:5000/{id}
+http://localhost:5000/api/roles/QA
 ```
+</details>

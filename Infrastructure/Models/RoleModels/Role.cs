@@ -12,7 +12,7 @@
         public Role(Guid id, string position)
         {
             Id = id;
-            Position = PositionsHelper.MapStringToPosition(position).ToString();
+            Position = position.MapStringToPosition().ToString();
             Description = "Role not defined yet.";
             HoursPerWeek = 40;
         }

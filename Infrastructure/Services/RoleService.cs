@@ -1,7 +1,6 @@
 ﻿using EmployeeApi.Infrastructure.Extensions;
 using EmployeeApi.Infrastructure.Models;
 using EmployeeApi.Infrastructure.Models.RoleModels;
-using EmployeeApi.Infrastructure.Responses.Role;
 using EmployeeApi.Infrastructure.Responses.RoleResponses;
 
 namespace EmployeeApi.Infrastructure.Repositories
@@ -24,9 +23,21 @@ namespace EmployeeApi.Infrastructure.Repositories
         {
             var role = _context.Roles.FirstOrDefault(x => x.Position == position);
 
-            if(role == null)
+            if (role == null)
             {
                 return new GetRoleReponse($"Role by position {position} does not exist.");
+            }
+
+            return new GetRoleReponse(role.AsDto());
+        }
+
+        public GetRoleReponse GetRoleById(Guid id)
+        {
+            var role = _context.Roles.FirstOrDefault(x => x.Id == id);
+
+            if (role == null)
+            {
+                return new GetRoleReponse($"Role with ID {id} does not exist.");
             }
 
             return new GetRoleReponse(role.AsDto());
@@ -52,17 +63,20 @@ namespace EmployeeApi.Infrastructure.Repositories
         {
             var role = _context.Roles.FirstOrDefault(x => x.Position == updatedRoleDto.Position);
 
-            if (role is null)
+            if (role == null)
             {
                 return new UpdateRoleResponse($"Role of position {updatedRoleDto.Position} does not exist.", false);
             }
 
-            role.Position = updatedRoleDto.Position;
+            if (updatedRoleDto.Position != Positions.NotDefinedYet.ToString())
+            {
+                role.Position = updatedRoleDto.Position;
+            }
+
             role.Description = updatedRoleDto.Description;
             role.HoursPerWeek = updatedRoleDto.HoursPerWeek;
 
             _context.SaveChanges();
-
             return new UpdateRoleResponse(role);
         }
 
@@ -75,7 +89,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
             var roleToDelete = _context.Roles.FirstOrDefault(x => x.Position == position);
 
-            if (roleToDelete is null)
+            if (roleToDelete == null)
             {
                 return new DeleteRoleResponse($"Role of position {position} does not exist.", false);
             }
@@ -87,7 +101,7 @@ namespace EmployeeApi.Infrastructure.Repositories
 
             _context.SaveChanges();
 
-            return new DeleteRoleResponse(roleToDelete);
+            return new DeleteRoleResponse(true, $"Role {position} was successfully deleted.", true, roleToDelete);
         }
     }
 }

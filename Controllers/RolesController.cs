@@ -41,16 +41,12 @@ namespace EmployeeApi.Controllers
             return CreatedAtAction(nameof(AddRole), response.Role?.Id);
         }
 
-        [HttpPut("{positionName}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult UpdateRole([FromBody] UpdateRoleDto updatedRoleDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var response = _roleService.UpdateRole(updatedRoleDto);
 
             if (!response.Success)

@@ -1,6 +1,6 @@
 ﻿using EmployeeApi.Infrastructure.Models.RoleModels;
 
-namespace EmployeeApi.Infrastructure.Responses.Role
+namespace EmployeeApi.Infrastructure.Responses.RoleResponses
 {
     public class GetRoleReponse : Response
     {

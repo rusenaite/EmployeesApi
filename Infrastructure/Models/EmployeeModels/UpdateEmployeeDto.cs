@@ -4,6 +4,8 @@
     {
         public string HomeAddress { get; set; }
         public double CurrentSalary { get; set; }
+        public string PositionName { get; set; }
+
         public UpdateEmployeeDto()
         {
 

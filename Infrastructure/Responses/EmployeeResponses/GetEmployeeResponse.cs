@@ -1,15 +1,17 @@
-﻿namespace EmployeeApi.Infrastructure.Responses.EmployeeResponses
+﻿using EmployeeApi.Infrastructure.Models.EmployeeModels;
+
+namespace EmployeeApi.Infrastructure.Responses.EmployeeResponses
 {
     public class GetEmployeeResponse : Response
     {
-        public Models.EmployeeModels.Employee? Employee { get; set; }
+        public Employee? Employee { get; set; }
 
-        public GetEmployeeResponse(bool success, string? message, Models.EmployeeModels.Employee? employee) : base(success, message)
+        public GetEmployeeResponse(bool success, string? message, Employee? employee) : base(success, message)
         {
             Employee = employee;
         }
 
-        public GetEmployeeResponse(Models.EmployeeModels.Employee? employee) : this(true, null, employee) { }
+        public GetEmployeeResponse(Employee? employee) : this(true, null, employee) { }
         public GetEmployeeResponse(string message) : this(false, message, null) { }
     }
 }

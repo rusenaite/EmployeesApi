@@ -12,9 +12,9 @@ namespace EmployeeApi.Infrastructure.Models
         NotDefinedYet
     }
 
-    public class PositionsHelper
+    public static class PositionsExtensions
     {
-        public static Positions MapStringToPosition(string position)
+        public static Positions MapStringToPosition(this string position)
         {
             return position switch
             {

@@ -60,6 +60,27 @@ namespace EmployeeApi.Infrastructure
                     Position = Positions.NotDefinedYet.ToString(),
                     Description = "Role for those, who does not have a position, or their position have been removed.",
                     HoursPerWeek = 30
+                },
+                new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Position = Positions.Ceo.ToString(),
+                    Description = "Chief Executive Officer.",
+                    HoursPerWeek = 40
+                },
+                new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Position = Positions.InformationAnalist.ToString(),
+                    Description = "Writes user stories for development teams.",
+                    HoursPerWeek = 20
+                },
+                new Role
+                {
+                    Id = Guid.NewGuid(),
+                    Position = Positions.HR.ToString(),
+                    Description = "head hunter for new employees.",
+                    HoursPerWeek = 40
                 }
             };
         }
