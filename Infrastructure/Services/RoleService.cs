@@ -3,6 +3,7 @@ using EmployeeApi.Infrastructure.Models;
 using EmployeeApi.Infrastructure.Models.EmployeeModels;
 using EmployeeApi.Infrastructure.Models.RoleModels;
 using EmployeeApi.Infrastructure.Responses.RoleResponses;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeApi.Infrastructure.Repositories
 {
@@ -96,17 +97,23 @@ namespace EmployeeApi.Infrastructure.Repositories
                 return new DeleteRoleResponse($"Role of position {position} does not exist.", false);
             }
 
-            _context.Roles.Remove(roleToDelete);
+            var effectedEmployees = _context.Employees
+                .Include("Role")
+                .Where(x => x.Role != null && x.Role.Id == roleToDelete.Id);
 
-            var effectedEmployees = _employeeService.GetAllEmployees().Where(x => x.Role.Id == roleToDelete.Id);
-            var undefinedRole = _context.Roles.Single(role => role.Position == Positions.NotDefinedYet.ToString());
+            var roleToAssign = _context.Roles.FirstOrDefault(x => x.Position == Positions.NotDefinedYet.ToString());
+
+            if (roleToAssign == null)
+            {
+                return new DeleteRoleResponse($"Cannot assign default role for effected employees.", false);
+            }
 
             foreach (var employee in effectedEmployees)
             {
-                _employeeService.UpdateEmployee(employee.Id, new UpdateEmployeeDto() { CurrentSalary = 1000, HomeAddress = employee.HomeAddress, PositionName = undefinedRole.Position });
+                employee.Role = roleToAssign;
             }
 
-
+            _context.Roles.Remove(roleToDelete);
             _context.SaveChanges();
 
             return new DeleteRoleResponse(true, $"Role {position} was successfully deleted.", true, roleToDelete);
