@@ -61,20 +61,21 @@ namespace EmployeeApi.Infrastructure.Repositories
             return new AddRoleResponse(roleToAdd);
         }
 
-        public UpdateRoleResponse UpdateRole(UpdateRoleDto updatedRoleDto)
+        public UpdateRoleResponse UpdateRole(Guid id, UpdateRoleDto updatedRoleDto)
         {
-            var role = _context.Roles.FirstOrDefault(x => x.Position == updatedRoleDto.Position);
+            var role = _context.Roles.FirstOrDefault(x => x.Id == id);
 
             if (role == null)
             {
                 return new UpdateRoleResponse($"Role of position {updatedRoleDto.Position} does not exist.", false);
             }
 
-            if (updatedRoleDto.Position != Positions.NotDefinedYet.ToString())
+            if (updatedRoleDto.Position == Positions.NotDefinedYet.ToString())
             {
-                role.Position = updatedRoleDto.Position;
+                return new UpdateRoleResponse($"Role of position {updatedRoleDto.Position} cannot be changed.", false);
             }
 
+            role.Position = updatedRoleDto.Position;
             role.Description = updatedRoleDto.Description;
             role.HoursPerWeek = updatedRoleDto.HoursPerWeek;
 
@@ -82,18 +83,18 @@ namespace EmployeeApi.Infrastructure.Repositories
             return new UpdateRoleResponse(role);
         }
 
-        public DeleteRoleResponse DeleteRole(string position)
+        public DeleteRoleResponse DeleteRole(Guid id)
         {
-            if (position == Positions.NotDefinedYet.ToString())
-            {
-                return new DeleteRoleResponse("'NotDefinedYet' position cannot be deleted.", false);
-            }
-
-            var roleToDelete = _context.Roles.FirstOrDefault(x => x.Position == position);
+            var roleToDelete = _context.Roles.FirstOrDefault(x => x.Id == id);
 
             if (roleToDelete == null)
             {
-                return new DeleteRoleResponse($"Role of position {position} does not exist.", false);
+                return new DeleteRoleResponse($"Role of ID {id} does not exist.", false);
+            }
+
+            if (roleToDelete.Position == Positions.NotDefinedYet.ToString())
+            {
+                return new DeleteRoleResponse("'NotDefinedYet' position cannot be deleted.", false);
             }
 
             var effectedEmployees = _context.Employees
@@ -115,7 +116,7 @@ namespace EmployeeApi.Infrastructure.Repositories
             _context.Roles.Remove(roleToDelete);
             _context.SaveChanges();
 
-            return new DeleteRoleResponse(true, $"Role {position} was successfully deleted.", true, roleToDelete);
+            return new DeleteRoleResponse(true, $"Role {roleToDelete.Position} was successfully deleted.", true, roleToDelete);
         }
     }
 }

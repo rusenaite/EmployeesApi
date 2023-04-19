@@ -25,6 +25,7 @@ namespace EmployeeApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult AddRole([FromBody] CreateRoleDto createRoleDto)
         {
             if (!ModelState.IsValid)
@@ -38,16 +39,16 @@ namespace EmployeeApi.Controllers
                 return BadRequest(response.Message);
             }
 
-            return CreatedAtAction(nameof(AddRole), response.Role?.Id);
+            return CreatedAtAction(nameof(AddRole), response.Role);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateRole([FromBody] UpdateRoleDto updatedRoleDto)
+        public IActionResult UpdateRole(Guid id, [FromBody] UpdateRoleDto updatedRoleDto)
         {
-            var response = _roleService.UpdateRole(updatedRoleDto);
+            var response = _roleService.UpdateRole(id, updatedRoleDto);
 
             if (!response.Success)
             {
@@ -61,13 +62,13 @@ namespace EmployeeApi.Controllers
             return Ok(response.Role);
         }
 
-        [HttpDelete("{positionName}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteRole(string positionName)
+        public IActionResult DeleteRole(Guid id)
         {
-            var response = _roleService.DeleteRole(positionName);
+            var response = _roleService.DeleteRole(id);
 
             if (!response.Success)
             {

@@ -39,15 +39,22 @@ namespace EmployeeApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult AddNewEmployee([FromBody] CreateEmployeeDto employeeDto)
         {
             var response = _employeeService.AddEmployee(employeeDto);
 
-            return CreatedAtAction(nameof(AddNewEmployee), response.Employee?.Id);
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return CreatedAtAction(nameof(AddNewEmployee), new { id = response.Employee?.Id }, response.Employee);
         }
 
         [HttpPut("{employeeId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult UpdateEmployee(Guid employeeId, [FromBody] UpdateEmployeeDto updatedEmployee)
         {

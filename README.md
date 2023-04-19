@@ -104,11 +104,11 @@ http://localhost:5000/api/roles
 </details>
 
 <details>
-<summary>PUT URI & request body example in JSON (update role)</summary>
+<summary>PUT URI & request body example in JSON (update role by ID)</summary>
 <br>
 
 ```
-http://localhost:5000/api/roles
+http://localhost:5000/api/roles/598266ed-e6ad-4c0b-baaa-2b456fd0173c
 ```
 
 ```
@@ -121,10 +121,10 @@ http://localhost:5000/api/roles
 </details>
 
 <details>
-<summary>DELETE URI (delete role by position)</summary>
+<summary>DELETE URI (delete role by ID)</summary>
 <br>
 
 ```
-http://localhost:5000/api/roles/QA
+http://localhost:5000/api/roles/598266ed-e6ad-4c0b-baaa-2b456fd0173c
 ```
 </details>
