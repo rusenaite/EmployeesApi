@@ -24,11 +24,11 @@ http://localhost:5000/api/employees
 </details>
 
 <details>
-<summary>GET URI (get employees by position)</summary>
+<summary>GET URI (get employees by ID)</summary>
 <br>
 
 ```
-http://localhost:5000/api/employees/?position=QA
+http://localhost:5000/api/employees/0b9dfe0a-8628-426a-a802-dc162331f1f6
 ```
 </details>
 

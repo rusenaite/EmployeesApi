@@ -24,28 +24,6 @@ namespace EmployeeApi.Infrastructure.Repositories
             return _context.Employees.Include("Role");
         }
 
-        public GetEmployeesResponse GetEmployeesByRole(string role)
-        {
-            var foundRole = _context.Roles.FirstOrDefault(x => x.Position.Equals(role));
-
-            if (foundRole == null)
-            {
-                return new GetEmployeesResponse($"Role {role} doesn't exist.");
-            }
-
-            var employees = _context.Employees
-                .Include("Role")
-                .Where(employee => foundRole == employee.Role)
-                .ToList();
-
-            if (!employees.Any())
-            {
-                return new GetEmployeesResponse($"Employees with {role} doesn't exist.");
-            }
-
-            return new GetEmployeesResponse(employees.Select(x => x.AsDto(foundRole)).ToList());
-        }
-
         public GetEmployeeResponse GetEmployeeById(Guid id)
         {
             var employee = GetEmployeeFromId(id);

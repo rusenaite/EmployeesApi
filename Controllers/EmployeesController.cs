@@ -22,23 +22,19 @@ namespace EmployeeApi.Controllers
             return Ok(_employeeService.GetAllEmployees());
         }
 
-        [HttpGet("{position}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<EmployeeDto>> GetEmployeesByPosition(string position)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<EmployeeDto>> GetEmployeesById(Guid id)
         {
-            var response = _employeeService.GetEmployeesByRole(position);
+            var response = _employeeService.GetEmployeeById(id);
 
             if (!response.Success)
             {
-                if (!response.Found)
-                {
-                    return NotFound(response.Message);
-                }
                 return BadRequest(response.Message);
             }
 
-            return Ok(response.Employees);
+            return Ok(response.Employee);
         }
 
         [HttpPost]
