@@ -10,7 +10,6 @@ namespace EmployeeApi.Infrastructure.Repositories
     public class RoleService
     {
         private readonly EmployeesDbContext _context;
-        private readonly EmployeeService _employeeService;
 
         public RoleService(EmployeesDbContext context)
         {

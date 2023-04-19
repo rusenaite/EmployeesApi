@@ -11,10 +11,5 @@ namespace EmployeeApi.Infrastructure.Models.EmployeeModels
         public string HomeAddress { get; set; }
         public double CurrentSalary { get; set; }
         public Role Role { get; set; }
-
-        public Employee()
-        {
-
-        }
     }
 }
